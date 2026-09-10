@@ -1,80 +1,85 @@
+# zip-handler-skill
+
+**Description**: Repository for zip-handler-skill - [Brief description to be added]
+
+**Purpose**: Enable AI agents to [main purpose to be added].
+
 ---
-name: zip-handler
-description: Handles ZIP archives including list contents, extract full or selected files to a safe target under artifacts, create new ZIPs from files or folders, and then open or read the extracted contents. Trigger on unzip, extract zip, open zip file, create zip, zip these files, list zip, pack into zip, or any ZIP archive request.
+
+## 🎯 Quick Start
+
+### For AI Agent Developers
+
+1. Review the documentation below
+2. Configure required settings
+3. Test with sample data
+4. Deploy and monitor
+
+### For Users
+
+Tell your AI agent to use this repository for [use case].
+
 ---
 
-# Zip Handler
+## 📊 Overview
 
-## Overview
-Provides reliable, safe ZIP archive operations inside the sandbox. Prefer the bundled scripts for extraction and creation to avoid path-traversal (zip-slip) and accidental overwrites.
+This repository contains [description].
 
-## Core Rules
-- Always work under `/home/workdir/artifacts` unless the user explicitly demands otherwise.
-- Never extract with absolute paths or `../` traversal. Use the safe scripts.
-- After extraction, use normal `read_file`, `bash`, or other tools to inspect the resulting files.
-- Report exact paths of every created or extracted item.
-- Prefer Python `zipfile` (via scripts) over raw `unzip`/`zip` for safety and control. Fall back to system tools only when needed.
+### Core Capabilities
 
-## Operations
+| Category | Description | Status |
+|----------|-------------|--------|
+| [Feature 1] | [Description] | ✅ Production |
+| [Feature 2] | [Description] | ✅ Production |
 
-### 1. List contents
-Use the helper:
-```bash
-python3 /home/workdir/.grok/skills/zip-handler/scripts/list_zip.py /path/to/archive.zip
-```
+---
 
-### 2. Extract (full or selected)
-Use the safe extractor (recommended):
-```bash
-python3 /home/workdir/.grok/skills/zip-handler/scripts/safe_extract.py /path/to/archive.zip /home/workdir/artifacts/extracted-name [--files file1 file2 ...] [--password SECRET]
-```
-- Creates the target directory if missing.
-- Rejects any member with absolute path or `..` components.
-- Supports selective extraction via `--files`.
-- Optional `--password` for traditional ZipCrypto encrypted members.
-- Prints every extracted path.
+## 🔒 Security Overview
 
-Fallback (less safe):
-```bash
-mkdir -p /home/workdir/artifacts/extracted-name
-unzip -o /path/to/archive.zip -d /home/workdir/artifacts/extracted-name
-```
+⚠️ **IMPORTANT**: Please read [SECURITY.md](./SECURITY.md) before using this repository.
 
-### 3. Create ZIP
-Use the safe creator:
-```bash
-python3 /home/workdir/.grok/skills/zip-handler/scripts/create_zip.py /home/workdir/artifacts/output.zip file1.txt folder/ [more paths...]
-```
-- Stores relative paths and preserves top-level directory names.
-- Skips non-existent paths with a warning.
-- Overwrites the target ZIP if it already exists.
+### Key Security Principles
 
-Fallback:
-```bash
-zip -r /home/workdir/artifacts/output.zip file1.txt folder/
-```
+1. Data Privacy
+2. Input Validation
+3. Secure Configuration
+4. Rate Limiting
+5. Audit Trail
 
-### 4. Extract then open/read
-1. Run the extract step above.
-2. Immediately use `read_file`, `bash cat/head`, or other file tools on the resulting paths under the extract directory.
-3. If the user wants a specific internal file, extract only that member first with `--files`.
+---
 
-## Scripts
-- `scripts/safe_extract.py` — path-traversal-safe extraction (full or selective)
-- `scripts/create_zip.py` — create ZIP from files/folders with relative names
-- `scripts/list_zip.py` — clean listing of archive members + sizes
+## 📚 Documentation
 
-## Known Limitations / Remaining Weaknesses
-- Password support is read-only (traditional ZipCrypto). Writing encrypted ZIPs and AES still unsupported (stdlib limitation).
-- Empty directories are now stored when possible, but some edge cases remain.
-- No progress bar or streaming for very large archives.
-- No compression level control or store-only mode flag.
-- No support for multi-volume or exotic ZIP variants.
-- No recursive exclusion filters (e.g. --exclude .git).
-- Unicode filenames work on modern filesystems but encoding can still bite on weird locales.
+| Document | Description | Required Reading |
+|----------|-------------|------------------|
+| [SECURITY.md](./SECURITY.md) | Security policy | ✅ Yes |
+| [CONTRIBUTING.md](./CONTRIBUTING.md) | Contribution guide | ⚠️ For contributors |
+| [TESTING.md](./TESTING.md) | Testing guide | ⚠️ For contributors |
+| [README.md](./README.md) | Overview | ✅ Yes |
+| [CHANGELOG.md](./CHANGELOG.md) | Changes | ⚠️ For reference |
 
-## Error handling
-- Missing ZIP → clear error, do not invent content.
-- Corrupt ZIP → report the exception message.
-- Permission / disk space → surface the real OS error.
-- Always log the exact command that was run and the final paths produced.
+---
+
+## 📜 License
+
+This repository is licensed under the **MIT License**. See [LICENSE](./LICENSE).
+
+---
+
+## 👤 Maintainer
+
+**Stijnman** - [GitHub Profile](https://github.com/Stijnman)
+
+---
+
+## 📞 Support
+
+| Issue Type | How to Get Help |
+|-----------|-----------------|
+| Bug Report | Open a [GitHub Issue](https://github.com/Stijnman/zip-handler-skill/issues) |
+| Security Issue | Email: security@stijnman.com |
+| General Question | Open a [GitHub Discussion](https://github.com/Stijnman/zip-handler-skill/discussions) |
+
+---
+
+*Last updated: September 11, 2026*
